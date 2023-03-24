@@ -34,7 +34,7 @@ router.get(
 router.get(
   "/books/new",
   Handler(async (req, res) => {
-    res.render("new-book", {});
+    res.render("new-book", { book: {}, title: "New Book" });
   })
 );
 
@@ -42,8 +42,22 @@ router.get(
 router.post(
   "/books/new",
   Handler(async (req, res) => {
-    const book = await Book.create(req.body);
-    res.redirect("/");
+    let book;
+    try {
+      book = await Book.create(req.body);
+      res.redirect("/");
+    } catch (error) {
+      if (error.name === "SequelizeValidationError") {
+        book = await Book.build(req.body);
+        res.render("new-book", {
+          book,
+          errors: error.errors,
+          title: "New Book",
+        });
+      } else {
+        throw error;
+      }
+    }
   })
 );
 
@@ -54,15 +68,50 @@ router.get(
     const bookId = req.params.id;
     const book = await Book.findByPk(bookId);
     if (book) {
-      res.render("update-book", { book: book });
+      res.render("update-book", { book, title: book.title });
     } else {
       const err = new Error();
       err.status = 404;
       err.message = "This Book Doesn't Exist!";
       res.render("page-not-found", {
-        message: err.message,
-        status: err.status,
+        title: "Page Not Found",
+        err,
       });
+    }
+  })
+);
+
+/* Updates Book Info in the Database */
+router.post(
+  "/books/:id",
+  Handler(async (req, res) => {
+    let book;
+    try {
+      book = await Book.findByPk(req.params.id);
+      if (book) {
+        await book.update(req.body);
+        res.redirect("/");
+      } else {
+        const err = new Error();
+        err.status = 404;
+        err.message = "Book Id Doesn't Exist";
+        res.render("page-not-found", {
+          title: "Page-Not-Found",
+          err,
+        });
+      }
+    } catch (error) {
+      if (error.name === "SequelizeValidationError") {
+        book = await Book.build(req.body);
+        book.id = req.params.id;
+        res.render("update-book", {
+          book,
+          errors: error.errors,
+          title: "New Book",
+        });
+      } else {
+        res.sendStatus(404);
+      }
     }
   })
 );

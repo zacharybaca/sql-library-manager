@@ -1,6 +1,12 @@
-doctype html
-head
-  title #{status}
-  link(rel='stylesheet' href='../public/stylesheets/style.css')
-h1 #{err} 
-p Sorry! There was an unexpected error on the server.
+extends layout
+
+block content
+
+  h1 Error With Server
+  h2=err.status
+  h2=err.message
+  //- pre #{error.stack}
+  p 
+     a(class="button" href="/") Back To Home
+  
+  

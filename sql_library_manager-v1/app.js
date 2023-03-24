@@ -1,26 +1,7 @@
-var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-const { sequelize } = require("./models/index.js");
-
-/*Next Step: Create page-not-found template to use Error Page Endpoint*/
-
-(async () => {
-  await sequelize.sync({
-    force: true,
-  });
-  try {
-    await sequelize.authenticate();
-    console.log("Connection Successful");
-  } catch (error) {
-    console.error("Error connecting: ", error);
-  }
-})();
-
+const Sequelize = require("./models/index.js").sequelize;
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
 
 var app = express();
 
@@ -28,35 +9,45 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
-app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
+// database connection
+(async () => {
+  try {
+    await Sequelize.sync();
+    await Sequelize.authenticate();
+    console.log("Connection to the database successful!");
+  } catch (error) {
+    console.error("Error connecting to the database: ", error);
+  }
+})();
 
-// 404 Error Handler
+app.use("/", indexRouter);
+
+// catch 404 and forward to error handler
 app.use((req, res, next) => {
-  const err = new Error("Error 404");
-  err.status = 404;
-  next(err);
+  const err = new Error();
+  err.statusCode = 404;
+  err.message = "Sorry ! the page you are looking for doesn't exist";
+  res.render("page-not-found", { title: "Page Not Found", err });
 });
 
-// Global Error Handler
+// error handler
 app.use((err, req, res, next) => {
-  if (err.status === 404) {
-    res
-      .status(404)
-      .render("page-not-found", { err: err.message, status: err.status });
-  } else {
-    err.message =
-      err.message || "A server error has occurred, please try again later.";
-    res
-      .status(err.status || 500)
-      .render("error", { err: err.message, status: err.status });
-  }
+  // set locals, only providing error in development
+  err.status = err.status ? err.status : 500;
+  err.message = err.message
+    ? err.message
+    : "Sorry,,,There was an issue with the server!";
+
+  console.log(err.status, err.message);
+
+  // render the error page
+  res.status(err.status);
+  res.render("error", { title: "Page Not Found", err });
 });
 
 module.exports = app;

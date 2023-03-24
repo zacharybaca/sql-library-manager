@@ -1,10 +1,9 @@
-doctype html
-head
-  title Page Not Found
-  link(rel='stylesheet' href='../public/stylesheets/style.css')
-h1 Page Not Found
-p #{message}
-br
-p #{status}
+extends layout 
 
-a.button(href='all_books.html') Home
+block content 
+    h1 Page Not Found 
+    h2=err.statusCode
+    br
+    p 
+        a(class="button" href="/") Home
+    img.main-error(src="images/404-error.jpg", alt="img")
