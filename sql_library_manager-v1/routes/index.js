@@ -13,13 +13,19 @@ function Handler(cb) {
   };
 }
 
-/* GET home page. */
+/* Homepage Redirect to Books Route */
 router.get(
   "/",
   Handler(async (req, res) => {
-    const books = await Book.findAll().then((book) => {
-      res.json(book);
-    });
+    res.redirect("/books");
+  })
+);
+
+/* GET Books */
+router.get(
+  "/books",
+  Handler(async (req, res) => {
+    const books = await Book.findAll();
     res.render("index", { books: books });
   })
 );
