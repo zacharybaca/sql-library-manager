@@ -47,4 +47,24 @@ router.post(
   })
 );
 
+/* Shows Book Detail Form */
+router.get(
+  "/books/:id",
+  Handler(async (req, res) => {
+    const bookId = req.params.id;
+    const book = await Book.findByPk(bookId);
+    if (book) {
+      res.render("update-book", { book: book });
+    } else {
+      const err = new Error();
+      err.status = 404;
+      err.message = "This Book Doesn't Exist!";
+      res.render("page-not-found", {
+        message: err.message,
+        status: err.status,
+      });
+    }
+  })
+);
+
 module.exports = router;
