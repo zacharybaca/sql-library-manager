@@ -30,4 +30,21 @@ router.get(
   })
 );
 
+/* Shows New Book Form */
+router.get(
+  "/books/new",
+  Handler(async (req, res) => {
+    res.render("new-book", {});
+  })
+);
+
+/* Posts New Book to Database */
+router.post(
+  "/books/new",
+  Handler(async (req, res) => {
+    const book = await Book.create(req.body);
+    res.redirect("/");
+  })
+);
+
 module.exports = router;
