@@ -7,11 +7,11 @@ block content
     include form
     p
       input(type="submit" value="Update Book")
-    p
-      a.button(href="/") Cancel
-    p
+    
 
   form(action="/books/" + book.id + "/delete", method="post")
-    input(type="submit", value="Delete")
+    p
+      input(type="submit", value="Delete")
     
-  
+  div(class="cancel")
+    a.button(href="/") Cancel

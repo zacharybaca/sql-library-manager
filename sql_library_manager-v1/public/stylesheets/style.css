@@ -4,14 +4,11 @@ body {
   background: rgb(19, 8, 55);
   color: white;
 }
-.main-error {
-  width: 100%;
-  margin: auto 0;
-}
+
 a {
   color: #019875;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: light;
   transition: 0.4s;
 }
 
@@ -19,7 +16,6 @@ a:hover {
   color: black;
 }
 
-a.button,
 input[type="submit"] {
   color: white;
   background: #019875;
@@ -30,14 +26,31 @@ input[type="submit"] {
   cursor: pointer;
 }
 
-form a.button,
-input[type="submit"] {
+form input[type="submit"] {
   margin-left: 140px;
+  width: 22%;
   transition: 0.4s;
 }
 
 input[type="submit"] {
   border: 0;
+}
+
+a.button {
+  margin-left: 75px;
+  color: white;
+  background: #019875;
+  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 10px 60px 12px;
+  font-size: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.4s;
+}
+
+.cancel {
+  margin-left: 140px;
 }
 
 a.button:hover,
@@ -59,9 +72,6 @@ ul {
 h2 {
   border-top: 2px solid #e7e7e7;
   padding-top: 20px;
-}
-.results-text {
-  text-align: center;
 }
 
 th {
@@ -106,13 +116,19 @@ input[type="text"] {
 .error {
   color: rgb(236, 15, 15);
 }
+
 .nav {
   display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-.nav {
-  justify-content: space-between;
+.nav a {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: 0.4s;
 }
 .table {
   padding: 1.5rem 0;
@@ -125,31 +141,4 @@ table {
   border-collapse: collapse;
   margin: 0 auto;
   width: 90%;
-}
-.search-form {
-  max-width: 200px;
-  display: flex;
-}
-.search-form button {
-  border: none;
-  background-color: #22007c;
-  padding: 0 13px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.pagination {
-  display: flex;
-}
-
-.pagination li {
-  margin: 0.5em;
-  background: skyblue;
-  padding: 14px;
-  border-radius: 5px;
-}
-
-footer {
-  margin: 0 auto;
-  width: 12%;
 }
