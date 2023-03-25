@@ -116,4 +116,27 @@ router.post(
   })
 );
 
+/* Delete Book From Database */
+router.post(
+  "/books/:id/delete",
+  Handler(async (req, res) => {
+    try {
+      const book = await Book.findByPk(req.params.id);
+      if (book) {
+        await book.destroy();
+        res.redirect("/");
+      } else {
+        res.sendStatus(404);
+      }
+    } catch (error) {
+      if (error.name === "SequelizeValidationError") {
+        const errors = error.errors.map((err) => err.message);
+        console.error("Validation errors: ", errors);
+      } else {
+        throw error;
+      }
+    }
+  })
+);
+
 module.exports = router;

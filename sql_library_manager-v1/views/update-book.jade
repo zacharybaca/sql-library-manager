@@ -10,5 +10,8 @@ block content
     p
       a.button(href="/") Cancel
     p
-  form(action='/books/${book.id}/delete' method='POST')
-    input.delete(type="submit" value="Delete Book")
+
+  form(action="/books/" + book.id + "/delete", method="post")
+    input(type="submit", value="Delete")
+    
+  
